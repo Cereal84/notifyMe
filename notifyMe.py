@@ -84,11 +84,10 @@ def options():
                       " This option is mandatory.")
 
     parser.add_option("-T", "--timeit", dest="timeit",
-                      metavar="\"TIMEIT\"",
                       help="time the command to be executed")
 
     group_note = OptionGroup(parser, "Note",
-                             "Every options, excepts for -f, need an argument between the \"\" if the argument is composed by more than 1 word."
+                             "Every options need an argument between the \"\" if the argument is composed by more than 1 word."
                              "EXAMPLE if the title is Super Urgent Data you need to type :"
                              " -t \"Super Urgent Data\" . "
                              "This is necessary even for the -e and -m options, if the argument is composed by just one element"
