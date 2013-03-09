@@ -1,0 +1,10 @@
+2013-03-09	Francesco Pischedda
+	* notify.py : Added the support to OSX using gntp (Growl Notifications)
+	* notify.py : Added -T option
+	* notify.py : Code refactoring
+	* notify.py : PEP8 complaint
+	* notify.py : Removed useless code
+
+2013-03-10	Alessandro Pischedda
+	* notify.py : optparse (deprecated) sobstitute with argsparse
+	* notify.py : Clean the help menu
