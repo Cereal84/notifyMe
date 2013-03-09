@@ -28,24 +28,12 @@ def setup_pynotify():
 
 
 def setup_gntp():
-    # More complete example
-    growl = gntp.notifier.GrowlNotifier(
-        applicationName="NotifyMe",
-        notifications=["Completed job",],
-    )
-
-    try:
-        growl.register()
-    except:
-        # Be silent.
-        pass
 
     def notifier(_title, message):
-        growl.notify(
-            noteType="Completed job",
-            title=_title,
-            description=message,
-            sticky=False,
+        gntp.notifier.mini(
+            title=u"{0}".format(_title),
+            description=u"{0}".format(message),
+            applicationName=u"NotifyMe"
         )
 
     return notifier
