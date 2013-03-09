@@ -13,6 +13,35 @@ __email__ = "alessandro.pischedda@gmail.com"
 import sys
 from subprocess import call
 
+<<<<<<< HEAD
+=======
+
+def setup_pynotify():
+
+    if not pynotify.init("NotifyMe"):
+        sys.exit(1)
+
+    def notifier(title, message):
+
+        n = pynotify.Notification(opts['title'], msg)
+        n.show()
+
+    return notifier
+
+
+def setup_gntp():
+
+    def notifier(_title, message):
+        gntp.notifier.mini(
+            title=u"{0}".format(_title),
+            description=u"{0}".format(message),
+            applicationName=u"NotifyMe"
+        )
+
+    return notifier
+
+
+>>>>>>> 351bc32311f9c287834866f5574ab4459219cc80
 try:
     import pynotify
 except ImportError:
@@ -50,7 +79,7 @@ def options():
                       " This option is mandatory.")
 
     group_note = OptionGroup(parser, "Note",
-                             "Every options, excepts for -f, need an argument between the \"\" if the argument is composed by more than 1 word."
+                             "Every options need an argument between the \"\" if the argument is composed by more than 1 word."
                              "EXAMPLE if the title is Super Urgent Data you need to type :"
                              " -t \"Super Urgent Data\" . "
                              "This is necessary even for the -e and -m options, if the argument is composed by just one element"
@@ -75,8 +104,14 @@ if __name__ == "__main__":
 
     opts = options()
 
+<<<<<<< HEAD
     if not pynotify.init("NotifyMe"):
         sys.exit(1)
+=======
+    if opts['timeit'] is not None:
+        import timeit
+        cmd = opts['command']
+>>>>>>> 351bc32311f9c287834866f5574ab4459219cc80
 
     # execute the command and wait until it is finished
     call(opts['command'], shell=True)
