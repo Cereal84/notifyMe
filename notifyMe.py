@@ -113,7 +113,7 @@ if __name__ == "__main__":
 
     opts = options()
 
-    if 'timeit' in opts:
+    if opts['timeit'] is not None:
         import timeit
         cmd = opts['command']
 
