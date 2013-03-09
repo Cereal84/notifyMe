@@ -13,11 +13,57 @@ __email__ = "alessandro.pischedda@gmail.com"
 import sys
 from subprocess import call
 
+
+def setup_pynotify():
+
+    if not pynotify.init("NotifyMe"):
+        sys.exit(1)
+
+    def notifier(title, message):
+
+        n = pynotify.Notification(opts['title'], msg)
+        n.show()
+
+    return notifier
+
+
+def setup_gntp():
+    # More complete example
+    growl = gntp.notifier.GrowlNotifier(
+        applicationName="NotifyMe",
+        notifications=["Completed job",],
+    )
+
+    try:
+        growl.register()
+    except:
+        # Be silent.
+        pass
+
+    def notifier(_title, message):
+        growl.notify(
+            noteType="Completed job",
+            title=_title,
+            description=message,
+            sticky=False,
+        )
+
+    return notifier
+
+
 try:
     import pynotify
+    notifier = setup_pynotify()
 except ImportError:
     print "Library pynotify missing"
-    sys.exit(-1)
+    print "trying to import gntp (Growl Notifications)"
+
+    try:
+        import gntp.notifier
+        notifier = setup_gntp()
+    except ImportError:
+        print "Unable to import gntp, exiting"
+        sys.exit(-1)
 
 try:
     from optparse import OptionParser, OptionGroup
@@ -49,6 +95,10 @@ def options():
                       "remember to type the options for the command."
                       " This option is mandatory.")
 
+    parser.add_option("-T", "--timeit", dest="timeit",
+                      metavar="\"TIMEIT\"",
+                      help="time the command to be executed")
+
     group_note = OptionGroup(parser, "Note",
                              "Every options, excepts for -f, need an argument between the \"\" if the argument is composed by more than 1 word."
                              "EXAMPLE if the title is Super Urgent Data you need to type :"
@@ -75,11 +125,18 @@ if __name__ == "__main__":
 
     opts = options()
 
-    if not pynotify.init("NotifyMe"):
-        sys.exit(1)
+    if 'timeit' in opts:
+        import timeit
+        cmd = opts['command']
 
-    # execute the command and wait until it is finished
-    call(opts['command'], shell=True)
+        fun = "call('%s', shell=True)" % cmd
+        setup = "from subprocess import call"
+        avg = timeit.timeit(stmt=fun, setup=setup, number=1)
 
-    n = pynotify.Notification(opts['title'], opts['message'])
-    n.show()
+        msg = "%s\ntime: %s" % (opts['message'], avg)
+    else:
+        # execute the command and wait until it is finished
+        call(opts['command'], shell=True)
+        msg = opts['message']
+
+    notifier(opts['title'], msg)
