@@ -13,8 +13,6 @@ __email__ = "alessandro.pischedda@gmail.com"
 import sys
 from subprocess import call
 
-<<<<<<< HEAD
-=======
 
 def setup_pynotify():
 
@@ -41,12 +39,19 @@ def setup_gntp():
     return notifier
 
 
->>>>>>> 351bc32311f9c287834866f5574ab4459219cc80
 try:
     import pynotify
+    notifier = setup_pynotify()
 except ImportError:
     print "Library pynotify missing"
-    sys.exit(-1)
+    print "trying to import gntp (Growl Notifications)"
+
+    try:
+        import gntp.notifier
+        notifier = setup_gntp()
+    except ImportError:
+        print "Unable to import gntp, exiting"
+        sys.exit(-1)
 
 try:
     from optparse import OptionParser, OptionGroup
@@ -78,6 +83,9 @@ def options():
                       "remember to type the options for the command."
                       " This option is mandatory.")
 
+    parser.add_option("-T", "--timeit", dest="timeit",
+                      help="time the command to be executed")
+
     group_note = OptionGroup(parser, "Note",
                              "Every options need an argument between the \"\" if the argument is composed by more than 1 word."
                              "EXAMPLE if the title is Super Urgent Data you need to type :"
@@ -104,18 +112,18 @@ if __name__ == "__main__":
 
     opts = options()
 
-<<<<<<< HEAD
-    if not pynotify.init("NotifyMe"):
-        sys.exit(1)
-=======
     if opts['timeit'] is not None:
         import timeit
         cmd = opts['command']
->>>>>>> 351bc32311f9c287834866f5574ab4459219cc80
 
-    # execute the command and wait until it is finished
-    call(opts['command'], shell=True)
+        fun = "call('%s', shell=True)" % cmd
+        setup = "from subprocess import call"
+        avg = timeit.timeit(stmt=fun, setup=setup, number=1)
 
-    n = pynotify.Notification(opts['title'], opts['message'])
-    n.show()
+        msg = "%s\ntime: %s" % (opts['message'], avg)
+    else:
+        # execute the command and wait until it is finished
+        call(opts['command'], shell=True)
+        msg = opts['message']
 
+    notifier(opts['title'], msg)
