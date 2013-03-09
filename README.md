@@ -12,6 +12,10 @@ Requirements
 * python
 * python-notify
 
+Support
+-------
+ -------
+Due the python-notify library this script supports only Linux O.S. .
 
 Usage
 -----
@@ -59,14 +63,19 @@ Usage
 
 	  python notifyMe.py -t ls -m "ls terminated" -e "ls -l"
 
-AUTHOR
+Acknowledgement
+---------------
+ ---------------
+Francesco Pischedda to have removed the os library and put the source code style complaint with Pep8.
+
+Author
 ------
  ------
 
 Alessandro Pischedda
 
 
-CONTACT
+Contact
 -------
  -------
 alessandro.pischedda@gmail.com
