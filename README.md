@@ -51,7 +51,7 @@ Usage
 	   by more than 1 word. EXAMPLE if the title is Super Urgent Data you need to
 	   type : 
 
-		-t "Super Urgent Data" 
+		python notifyMe.py -t "Super Urgent Data" -e "COMMAND ARGS" 
 	   This is necessary even for the -e and -m options, if the argument is composed
 	   by just one element you can ignore the "".
 
