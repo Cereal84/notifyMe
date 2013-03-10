@@ -15,7 +15,7 @@ Requirements
 Support
 -------
  -------
-Due the python-notify library this script supports only Linux O.S. .
+Due the python-notify library this script supports Linux and OSX .
 
 Usage
 -----
