@@ -54,54 +54,53 @@ except ImportError:
         sys.exit(-1)
 
 try:
-    from optparse import OptionParser, OptionGroup
+    from argparse import ArgumentParser, RawDescriptionHelpFormatter
 except ImportError:
-    print "Library optparse missing"
+    print "Library argparse missing"
     sys.exit(-1)
 
 
 def options():
 
     # set the option and help
-    usage = "usage: python %prog [OPTIONS] -e \"COMMAND ARGS\""
+    epilog = '''\
+Note: 
+       Every options need an argument between the \"\" if the argument is 
+       composed by more than 1 word.
+       EXAMPLE if the title is Super Urgent Data you need to type :
+              python notifyMe.py -t \"Super Urgent Data\" -e \"ls -l\".
+       This is necessary even for the -e and -m options, if the argument 
+       is composed by just one element you can ignore the \"\".
 
-    parser = OptionParser(usage=usage, version="%prog 0.9")
-    parser.add_option("-t", "--title",
+Mandatory Options:
+       The option -e is mandatory.'''
+
+    # the RawDescriptionHelpFormatter is used to show the epilog has I want
+    parser = ArgumentParser(epilog=epilog, formatter_class=RawDescriptionHelpFormatter,version="%prog 0.9")
+    parser.add_argument("-t", "--title",
                       default="",
                       metavar="\"TITLE\"",
                       dest="title",
                       help="specify the title in the notification bar, "
                       "by default the title will be empty")
-    parser.add_option("-m", "--message",
+    parser.add_argument("-m", "--message",
                       metavar="\"MESSAGE\"",
                       dest="message", default="Terminated",
                       help="specify the message to be showed in the notification bar "
                       "by default is \"Terminated\"")
-    parser.add_option("-e", "--execute", dest="command",
+    parser.add_argument("-T", "--timeit", dest="timeit", action="store_true",
+                      help="time the command to be executed")
+    parser.add_argument("-e", "--execute", dest="command",
                       metavar="\"COMMAND\"",
                       help="the command to be executed, "
                       "remember to type the options for the command."
                       " This option is mandatory.")
 
-    parser.add_option("-T", "--timeit", dest="timeit",
-                      help="time the command to be executed")
 
-    group_note = OptionGroup(parser, "Note",
-                             "Every options need an argument between the \"\" if the argument is composed by more than 1 word."
-                             "EXAMPLE if the title is Super Urgent Data you need to type :"
-                             " -t \"Super Urgent Data\" . "
-                             "This is necessary even for the -e and -m options, if the argument is composed by just one element"
-                             " you can ignore the \"\".")
-
-    group_mandatory = OptionGroup(parser, "Mandatory Options", "The option -e is mandatory")
-
-    parser.add_option_group(group_mandatory)
-    parser.add_option_group(group_note)
-
-    (options, args) = parser.parse_args()
+    args = parser.parse_args()
 
     # make options as a dictionary
-    opts = options.__dict__
+    opts = args.__dict__
 
     if opts['command'] is None:
         parser.error("Missing the option -e, it is mandatory.")

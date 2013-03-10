@@ -40,6 +40,8 @@ Usage
          	               specify the message to be showed in the notification
          	               bar by default is "Terminated"
 
+	  -T, --timeit          time the command to be executed
+
   	  -e "COMMAND", --execute="COMMAND"
          	               the command to be executed, remember to type the
          	               options for the command. This option is mandatory
